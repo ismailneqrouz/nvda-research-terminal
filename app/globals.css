@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 9 12 17;
+  --panel: 14 19 26;
+  --raised: 20 27 36;
+  --line: 33 42 54;
+  --ink: 230 234 240;
+  --muted: 139 150 163;
+  --faint: 92 103 117;
+  --up: 63 181 127;
+  --down: 229 96 88;
+  --warn: 214 160 72;
+  --info: 120 160 200;
+  color-scheme: dark;
+}
+
+@layer base {
+  html { background: rgb(var(--bg)); }
+  body {
+    @apply bg-bg text-ink font-sans antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection { background: rgb(var(--up) / 0.3); }
+  * { scrollbar-color: rgb(var(--line)) transparent; scrollbar-width: thin; }
+}
+
+@layer components {
+  .num { @apply font-mono tabular-nums; font-feature-settings: 'tnum'; }
+  .panel { @apply bg-panel border border-line rounded; }
+  .label { @apply text-2xs uppercase tracking-[0.08em] text-muted font-medium; }
+  .h-section { @apply text-[15px] font-semibold text-ink tracking-tight; }
+  .prose-research p { @apply text-[13.5px] leading-6 text-ink/85 mb-3; }
+  .prose-research p:last-child { @apply mb-0; }
+  .prose-research strong { @apply text-ink font-semibold; }
+  .link { @apply text-info underline-offset-2 hover:underline; }
+  .tbl { @apply w-full text-[12.5px] border-collapse; }
+  .tbl th { @apply text-left font-medium text-muted text-2xs uppercase tracking-wider px-3 py-2 border-b border-line whitespace-nowrap; }
+  .tbl td { @apply px-3 py-1.5 border-b border-line/60 align-top; }
+  .tbl tr:hover td { @apply bg-raised/50; }
+  .tbl td.n, .tbl th.n { @apply text-right num whitespace-nowrap; }
+}
+
+.recharts-cartesian-grid line { stroke: rgb(var(--line) / 0.6); }
+.recharts-text { fill: rgb(var(--muted)); font-size: 11px; font-family: 'IBM Plex Mono', monospace; }
+.recharts-tooltip-cursor { fill: rgb(var(--raised) / 0.6); }

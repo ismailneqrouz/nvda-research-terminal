@@ -1,0 +1,55 @@
+export interface Term {
+  id: string;
+  term: string;
+  measures: string;
+  formula: string;
+  why: string;
+  good?: string;
+}
+
+/** Contextual explanations used by clickable metric labels throughout the terminal. */
+export const GLOSSARY: Term[] = [
+  { id: 'revenue', term: 'Revenue', measures: 'Total sales of products and services recognised in the period.', formula: 'As reported on the income statement.', why: 'The top line; for NVIDIA it is a direct read on AI-infrastructure spending.' },
+  { id: 'gross-margin', term: 'Gross margin', measures: 'Share of revenue left after the direct cost of making products.', formula: '(Revenue − cost of revenue) ÷ revenue', why: 'Signals pricing power and component-cost pressure. NVIDIA’s >70% is exceptional for hardware.', good: 'Semiconductor designers: 50–65% is strong; >70% indicates a near-monopoly product.' },
+  { id: 'operating-margin', term: 'Operating margin', measures: 'Profit from operations per dollar of revenue, after R&D and SG&A.', formula: 'Operating income ÷ revenue', why: 'Captures operating leverage — how much of each extra dollar of sales reaches profit.', good: '>30% is excellent for a chip company.' },
+  { id: 'ebit', term: 'EBIT', measures: 'Earnings before interest and taxes, including non-operating income.', formula: 'Pre-tax income + interest expense', why: 'Differs from operating income by other income (e.g. investment gains), which is large for NVIDIA in FY2027.' },
+  { id: 'ebitda', term: 'EBITDA', measures: 'Operating profit before depreciation and amortisation.', formula: 'Operating income + D&A (calculated; not a GAAP measure)', why: 'A rough proxy for operating cash generation; widely used in EV multiples.', good: 'Ignores capex and working capital — always compare with free cash flow.' },
+  { id: 'net-margin', term: 'Net margin', measures: 'Bottom-line profit per dollar of revenue.', formula: 'Net income ÷ revenue', why: 'Includes taxes and non-operating items, so it can be distorted by one-offs.' },
+  { id: 'fcf', term: 'Free cash flow', measures: 'Cash generated after the capital investment needed to sustain and grow the business.', formula: 'Operating cash flow − capital expenditures', why: 'What is actually available for buybacks, dividends, acquisitions or debt reduction.' },
+  { id: 'fcf-margin', term: 'FCF margin', measures: 'Free cash flow per dollar of revenue.', formula: 'Free cash flow ÷ revenue', why: 'Shows how much revenue converts into distributable cash.' },
+  { id: 'roe', term: 'Return on equity (ROE)', measures: 'Profit generated per dollar of shareholders’ equity.', formula: 'Net income ÷ average shareholders’ equity', why: 'Captures shareholder returns, but can be inflated by leverage or buybacks.', good: '>15% is good; >30% is exceptional.' },
+  { id: 'roa', term: 'Return on assets (ROA)', measures: 'Profit generated per dollar of total assets.', formula: 'Net income ÷ average total assets', why: 'Leverage-neutral view of profitability; penalises large cash balances.' },
+  { id: 'roic', term: 'Return on invested capital (ROIC)', measures: 'After-tax operating profit per dollar of capital actually deployed in operations.', formula: 'NOPAT ÷ average invested capital, where NOPAT = operating income × (1 − effective tax rate) and invested capital = equity + debt + lease liabilities − cash − marketable securities − non-marketable investments', why: 'The best single measure of whether a business creates value: ROIC above the cost of capital (≈10–12% for NVIDIA) means growth adds value.', good: '>15% is strong; >100% means the business needs almost no capital to grow — rare and often transitory.' },
+  { id: 'rotic', term: 'Return on tangible invested capital', measures: 'ROIC excluding goodwill and acquired intangibles from capital.', formula: 'NOPAT ÷ average (invested capital − goodwill − intangibles)', why: 'Shows returns of the organic operating business, independent of acquisition accounting.' },
+  { id: 'asset-turnover', term: 'Asset turnover', measures: 'Revenue generated per dollar of assets.', formula: 'Revenue ÷ average total assets', why: 'Efficiency of the asset base. NVIDIA’s large cash pile depresses it.' },
+  { id: 'inventory-turnover', term: 'Inventory turnover', measures: 'How many times inventory is sold and replaced per year.', formula: 'Cost of revenue ÷ average inventory', why: 'Falling turnover can signal over-ordering or slowing demand.' },
+  { id: 'dio', term: 'Days inventory outstanding (DIO)', measures: 'Average days inventory is held before sale.', formula: 'Average inventory ÷ cost of revenue × 365', why: 'For NVIDIA rising DIO also reflects complex rack-scale systems and strategic memory purchases.' },
+  { id: 'dso', term: 'Days sales outstanding (DSO)', measures: 'Average days to collect payment from customers.', formula: 'Average receivables ÷ revenue × 365', why: 'Rising DSO may indicate extended payment terms or collection risk.' },
+  { id: 'dpo', term: 'Days payables outstanding (DPO)', measures: 'Average days the company takes to pay suppliers.', formula: 'Average payables ÷ cost of revenue × 365', why: 'Higher DPO means suppliers finance more of working capital.' },
+  { id: 'ccc', term: 'Cash conversion cycle', measures: 'Days between paying suppliers and collecting from customers.', formula: 'DIO + DSO − DPO', why: 'Longer cycle = more cash tied up in operations as the company grows.' },
+  { id: 'cfo-ni', term: 'CFO / net income', measures: 'How much of reported profit arrives as operating cash.', formula: 'Operating cash flow ÷ net income', why: 'A core earnings-quality test. Persistently below 1.0 warrants scrutiny of receivables, inventory and non-cash gains.', good: '≈1.0 or above over multi-year periods.' },
+  { id: 'sbc', term: 'Stock-based compensation', measures: 'Non-cash expense for equity granted to employees.', formula: 'As reported in the cash-flow statement', why: 'A real economic cost (dilution). NVIDIA offsets it with buybacks and RSU tax withholding.' },
+  { id: 'net-debt', term: 'Net debt / net cash', measures: 'Debt minus cash and liquid investments.', formula: 'Total debt − cash − marketable securities (negative = net cash)', why: 'Shows the true financial leverage after counting liquid assets.' },
+  { id: 'current-ratio', term: 'Current ratio', measures: 'Short-term assets relative to short-term obligations.', formula: 'Current assets ÷ current liabilities', why: 'Liquidity indicator.', good: '>1.5 is comfortable for a fabless chip designer.' },
+  { id: 'quick-ratio', term: 'Quick ratio', measures: 'Liquidity excluding inventory and prepaid items.', formula: '(Cash + marketable securities + receivables) ÷ current liabilities', why: 'Stricter test because inventory may not be quickly saleable.' },
+  { id: 'cash-ratio', term: 'Cash ratio', measures: 'Cash and liquid securities relative to current liabilities.', formula: '(Cash + marketable securities) ÷ current liabilities', why: 'The most conservative liquidity measure.' },
+  { id: 'interest-coverage', term: 'Interest coverage', measures: 'Ability to pay interest from operating profit.', formula: 'Operating income ÷ interest expense', why: 'Solvency indicator; above ~10× interest is rarely a concern.' },
+  { id: 'pe', term: 'Price / earnings (P/E)', measures: 'Price paid per dollar of trailing earnings.', formula: 'Share price ÷ TTM diluted EPS', why: 'Most common valuation multiple; low P/E on peak cyclical earnings can be a trap.' },
+  { id: 'forward-pe', term: 'Forward P/E', measures: 'Price relative to expected earnings.', formula: 'Share price ÷ consensus EPS estimate', why: 'Embeds analyst expectations; consensus for NVIDIA is non-GAAP.' },
+  { id: 'peg', term: 'PEG ratio', measures: 'P/E adjusted for expected EPS growth.', formula: 'P/E ÷ expected EPS growth (in %)', why: 'Below 1 suggests growth is cheap — but one year of hyper-growth makes PEG nearly meaningless.' },
+  { id: 'ps', term: 'Price / sales', measures: 'Market value per dollar of revenue.', formula: 'Market cap ÷ TTM revenue', why: 'Useful when earnings are volatile; must be read with margins.' },
+  { id: 'pb', term: 'Price / book', measures: 'Market value relative to accounting equity.', formula: 'Market cap ÷ shareholders’ equity', why: 'Less meaningful for asset-light, IP-driven businesses.' },
+  { id: 'ev', term: 'Enterprise value (EV)', measures: 'Value of the operating business to all capital providers.', formula: 'Market cap + debt − cash − marketable securities', why: 'Neutralises capital structure so companies with different cash/debt can be compared.' },
+  { id: 'ev-ebitda', term: 'EV / EBITDA', measures: 'Enterprise value per dollar of EBITDA.', formula: 'EV ÷ TTM EBITDA', why: 'Capital-structure-neutral multiple; flatters capital-intensive firms.' },
+  { id: 'ev-ebit', term: 'EV / EBIT', measures: 'Enterprise value per dollar of operating profit.', formula: 'EV ÷ TTM operating income', why: 'Accounts for depreciation, better for comparing fabless vs fab-owning firms.' },
+  { id: 'ev-fcf', term: 'EV / FCF', measures: 'Enterprise value per dollar of free cash flow.', formula: 'EV ÷ TTM free cash flow', why: 'Cash-based multiple; penalises working-capital build.' },
+  { id: 'fcf-yield', term: 'FCF yield', measures: 'Free cash flow as a % of market value.', formula: 'TTM free cash flow ÷ market cap', why: 'Comparable to bond yields; ~4.9% for NVIDIA vs a ~5% 10-year Treasury.' },
+  { id: 'dividend-yield', term: 'Dividend yield', measures: 'Annual dividend relative to price.', formula: 'Annualised current dividend ÷ price', why: 'NVIDIA’s dividend is small relative to buybacks.' },
+  { id: 'wacc', term: 'Weighted average cost of capital (WACC)', measures: 'Blended required return of equity and debt holders.', formula: 'E/V × cost of equity + D/V × cost of debt × (1 − tax); cost of equity = risk-free + β × equity risk premium', why: 'The discount rate in a DCF; small changes move intrinsic value a lot.' },
+  { id: 'terminal-growth', term: 'Terminal growth', measures: 'Perpetual growth rate of cash flows after the forecast horizon.', formula: 'Gordon growth: TV = FCF₍N+1₎ ÷ (WACC − g)', why: 'Must stay below long-run nominal GDP growth; drives a large share of DCF value.' },
+  { id: 'margin-of-safety', term: 'Margin of safety', measures: 'Discount of the market price to estimated intrinsic value.', formula: '1 − price ÷ intrinsic value', why: 'A buffer against model error; negative when the price exceeds the estimate.' },
+  { id: 'ttm', term: 'TTM (trailing twelve months)', measures: 'The most recent four fiscal quarters.', formula: 'FY2026 + 9M FY2027 − 9M FY2026', why: 'Uses the latest data while keeping a full-year basis.' },
+  { id: 'tam', term: 'TAM / SAM / SOM', measures: 'Total, serviceable and obtainable addressable market.', formula: 'Market-size estimates', why: 'Forecasts by management or research firms — not observed market size.' },
+];
+
+export const GLOSSARY_MAP = Object.fromEntries(GLOSSARY.map((t) => [t.id, t]));
