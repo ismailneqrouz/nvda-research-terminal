@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { SCENARIOS, SCENARIO_WEIGHTS, type ScenarioKey, FY27E_REVENUE } from '@/lib/data/scenarios';
 import { GUIDANCE, val } from '@/lib/data/financials';
 import { CONSENSUS, QUOTE } from '@/lib/data/market';
@@ -45,7 +46,7 @@ export default function OutlookPage() {
     <>
       <PageHeader title="Future Outlook" description="Three explicit scenarios — bull, base and bear — each defined by revenue, margin, cash-flow and valuation assumptions, the intrinsic value they imply, what would trigger them and what would prove them wrong." />
       <Callout tone="neutral" title="Assumptions, not predictions">
-        Scenario values come from this platform’s DCF using the labelled inputs; they can be edited on the <a className="link" href="/valuation#dcf">Valuation</a> page. Management guidance and consensus are shown separately for comparison.
+        Scenario values come from this platform’s DCF using the labelled inputs; they can be edited on the <Link className="link" href="/valuation#dcf">Valuation</Link> page. Management guidance and consensus are shown separately for comparison.
       </Callout>
 
       <SectionTitle>Anchors from management and analysts</SectionTitle>
