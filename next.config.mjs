@@ -6,6 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   ...(isExport ? { output: 'export', trailingSlash: true, images: { unoptimized: true } } : {}),
   ...(basePath ? { basePath } : {}),
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
   // pg is only loaded on the server when DATABASE_URL is configured
   serverExternalPackages: ['pg'],
 };

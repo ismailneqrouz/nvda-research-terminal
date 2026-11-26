@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getResearchData } from '@/lib/data/provider';
-import { CONSENSUS, PEERS, PROVIDER_NVDA, QUOTE } from '@/lib/data/market';
+import { CONSENSUS, PEERS, PEERS_AS_OF, PROVIDER_NVDA, QUOTE } from '@/lib/data/market';
 import { SCENARIOS } from '@/lib/data/scenarios';
 import { cn, mult, pct, usd, usdM } from '@/lib/format';
 import { Metric, MetricGrid } from '@/components/data/metric';
@@ -33,6 +33,7 @@ export default async function ValuationPage() {
   const v = a.valuationSnapshot();
   const bear = runDcf(SCENARIOS.bear.inputs).perShare / QUOTE.price - 1;
   const bull = runDcf(SCENARIOS.bull.inputs).perShare / QUOTE.price - 1;
+  const base = runDcf(SCENARIOS.base.inputs).perShare / QUOTE.price - 1;
   const f = (x: number | null | undefined, isPct?: boolean) => (x == null ? null : isPct ? pct(x, 2) : mult(x, x < 1 ? 2 : 1));
   const peerVals = (k: Key) => PEERS.map((p) => p[k] as number | null);
   const median = (xs: (number | null)[]) => {
@@ -54,18 +55,18 @@ export default async function ValuationPage() {
         <Metric label="Enterprise value" termId="ev" value={usdM(v.enterpriseValue)} status="calculated" sourceIds={['nvda-q3fy27-pr']} />
         <Metric label="P/E (TTM, GAAP)" termId="pe" value={mult(v.pe)} sub={`ex. other income ${mult(v.peExOther)}`} status="calculated" sourceIds={['nvda-q3fy27-pr']} />
         <Metric label="Earnings yield" value={pct(v.earningsYield)} sub="vs 10Y UST ≈5.1%" status="calculated" sourceIds={['yields-nov26']} />
-        <Metric label="Analyst avg. target" value={usd(CONSENSUS.priceTargetAvg)} sub={`${CONSENSUS.analysts} analysts · range $${CONSENSUS.priceTargetLow}–$${CONSENSUS.priceTargetHigh}`} status="estimate" sourceIds={[CONSENSUS.sourceId]} />
+        <Metric label="Analyst avg. target" value={usd(CONSENSUS.priceTargetAvg)} sub={`Yahoo Nov 25: $${CONSENSUS.priceTargetAvgLatest} · range $${CONSENSUS.priceTargetLow}–$${CONSENSUS.priceTargetHigh}`} status="estimate" sourceIds={[CONSENSUS.sourceId]} />
       </MetricGrid>
 
       <SectionTitle>Relative valuation</SectionTitle>
-      <Panel title="Multiples vs peers" subtitle="NVDA calculated by this platform from filings and the Nov 20 close; peers from StockAnalysis (TTM, Nov 20, 2026)" bodyClass="p-0" sourceIds={['sa-nvda-stats', 'sa-amd', 'sa-avgo', 'sa-intc', 'sa-tsm']}>
+      <Panel title="Multiples vs peers" subtitle={`NVDA calculated by this platform from filings and the ${QUOTE.asOfLabel.replace('Close, ', '')} close; peers from StockAnalysis (TTM, ${PEERS_AS_OF} — latest consistent provider snapshot)`} bodyClass="p-0" sourceIds={['sa-nvda-stats', 'sa-amd', 'sa-avgo', 'sa-intc', 'sa-tsm']}>
         <div className="overflow-x-auto">
           <table className="tbl min-w-[900px]">
             <thead>
               <tr>
                 <th>Multiple</th>
                 <th className="n text-ink">NVDA <StatusBadge status="calculated" /></th>
-                <th className="n">NVDA (provider)</th>
+                <th className="n">NVDA (provider, Nov 20)</th>
                 {PEERS.map((p) => <th key={p.ticker} className="n">{p.ticker}</th>)}
                 <th className="n">Peer median</th>
                 <th className="n">NVDA vs median</th>
@@ -124,7 +125,7 @@ export default async function ValuationPage() {
         </Suspense>
       </div>
       <Interpretation label="Valuation risk">
-        <p>The base case lands near the market price; the bear and bull cases span {pct(bear, 0, true)} to {pct(bull, 0, true)} versus the current price. That asymmetry is the honest summary: the stock is not obviously expensive on today’s cash flows, but intrinsic value is extremely sensitive to the steady-state margin — a variable NVIDIA’s competitors and customers are actively trying to lower.</p>
+        <p>The base case is {pct(base, 0, true)} versus the market price; the bear and bull cases span {pct(bear, 0, true)} to {pct(bull, 0, true)} versus the current price. That asymmetry is the honest summary: the stock is not obviously expensive on today’s cash flows, but intrinsic value is extremely sensitive to the steady-state margin — a variable NVIDIA’s competitors and customers are actively trying to lower.</p>
       </Interpretation>
     </>
   );

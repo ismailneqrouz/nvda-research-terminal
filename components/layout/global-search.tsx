@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { CornerDownLeft, Search } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { NAV } from '@/lib/nav';
+import { NAV, PRESENT_LINK } from '@/lib/nav';
 import { GLOSSARY } from '@/lib/data/glossary';
 import { ALL_LINES } from '@/lib/data/financials';
 import { NEWS } from '@/lib/data/news';
@@ -16,6 +16,7 @@ function buildIndex(): Hit[] {
   const statementPage: Record<string, string> = { income: 'income', balance: 'balance', cashflow: 'cashflow' };
   return [
     ...NAV.map((n) => ({ kind: 'Section', label: n.label, href: n.href, hay: `${n.label} ${n.keywords}` })),
+    { kind: 'Section', label: PRESENT_LINK.label, href: PRESENT_LINK.href, hay: `${PRESENT_LINK.label} ${PRESENT_LINK.keywords}` },
     ...GLOSSARY.map((t) => ({ kind: 'Metric', label: t.term, detail: t.measures, href: `/sources#term-${t.id}`, hay: `${t.term} ${t.measures}` })),
     ...ALL_LINES.map((l) => ({ kind: 'Line item', label: l.label, detail: l.statement, href: `/financial-statements?tab=${statementPage[l.statement]}&q=${encodeURIComponent(l.label)}`, hay: `${l.label} ${l.statement}` })),
     ...NEWS.map((n) => ({ kind: 'News', label: n.headline, detail: n.date, href: `/news#${n.id}`, hay: `${n.headline} ${n.category}` })),

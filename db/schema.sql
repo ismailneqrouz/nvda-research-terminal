@@ -94,5 +94,13 @@ CREATE TABLE IF NOT EXISTS news_sources (
   PRIMARY KEY (news_id, source_id)
 );
 
+-- Month-end adjusted closes for NVDA and the SPY benchmark plus the TB3MS risk-free rate (risk statistics)
+CREATE TABLE IF NOT EXISTS monthly_prices (
+  month          CHAR(7) PRIMARY KEY,      -- YYYY-MM
+  nvda_adj_close NUMERIC(14,4) NOT NULL,
+  spy_adj_close  NUMERIC(14,4) NOT NULL,
+  rf_annual_pct  NUMERIC(8,4) NOT NULL
+);
+
 CREATE INDEX IF NOT EXISTS idx_line_values_period ON line_values(period_key);
 CREATE INDEX IF NOT EXISTS idx_news_date ON news_items(date DESC);

@@ -12,30 +12,29 @@ export const COMPANY = {
 };
 
 export const QUOTE = {
-  price: 125.53,
-  previousClose: 145.98,
-  change: -20.45,
-  changePct: -0.1401,
-  afterHours: 130.01,
-  dayHigh: 143.73,
-  dayLow: 124.5,
-  volume: 633_336_951,
+  price: 149.3,
+  previousClose: 155.38,
+  change: -6.08,
+  changePct: -0.0391,
+  afterHours: 151.22,
+  volume: 356_800_000,
   week52High: 243.37,
   week52HighDate: '2026-10-06',
   week52Low: 124.5,
   week52LowDate: '2026-11-20',
   recordClose: 239.24,
   recordCloseDate: '2026-10-06',
-  asOf: '2026-11-20T16:00:00-05:00',
-  asOfLabel: 'Close, Fri Nov 20, 2026, 4:00 PM ET',
+  asOf: '2026-11-25T16:00:00-05:00',
+  asOfLabel: 'Close, Wed Nov 25, 2026, 4:00 PM ET',
+  nextSession: 'US markets closed Thu Nov 26 (Thanksgiving); Fri Nov 27 early close',
   sharesOutstanding: 24150, // millions
   beta5y: 2.25,
   insiderOwnership: 0.039,
   institutionalOwnership: 0.7043,
-  sourceIds: ['sa-nvda-history', 'sa-nvda-stats', 'nvda-ir-quote'],
+  sourceIds: ['yahoo-nvda-quote', 'gotrade-nov25', 'sa-nvda-stats'],
 };
 
-export const DATA_LAST_UPDATED = '2026-11-22T22:00:00+01:00';
+export const DATA_LAST_UPDATED = '2026-11-26T08:00:00+01:00';
 export const LATEST_REPORT = {
   label: 'Q3 FY2027 (quarter ended Oct 25, 2026)',
   filed: '2026-11-17',
@@ -51,7 +50,9 @@ export const CONSENSUS = {
   fy2027EpsHigh: 10.52,
   forwardPe: 8.65,
   priceTargetLow: 130,
-  priceTargetAvg: 244.18,
+  priceTargetAvg: 244.18, // StockAnalysis, Nov 19
+  priceTargetAvgLatest: 242.43, // Yahoo Finance 1y target estimate, Nov 25
+  priceTargetLatestSourceId: 'yahoo-nvda-quote',
   priceTargetMedian: 235,
   priceTargetHigh: 425,
   analysts: 63,
@@ -61,8 +62,9 @@ export const CONSENSUS = {
   note: 'Consensus EPS is non-GAAP (adjusted). Estimates were largely set before the Nov 20 accounting-probe report and may lag.',
 };
 
-/** Provider-reported valuation metrics for NVDA at the Nov 20 close — used to cross-check our own calculations. */
+/** Provider-reported valuation metrics for NVDA at the Nov 20 close ($125.53) — used to cross-check our own calculations. */
 export const PROVIDER_NVDA = {
+  price: 125.53,
   marketCapB: 3030,
   evB: 2970,
   pe: 13.48,
@@ -77,6 +79,9 @@ export const PROVIDER_NVDA = {
   dividendYield: 0.008,
   sourceId: 'sa-nvda-stats',
 };
+
+/** Second, later cross-check: Yahoo Finance at the Nov 25 close. */
+export const PROVIDER_NVDA_LATEST = { price: 149.3, pe: 16.04, marketCapT: 3.605, sourceId: 'yahoo-nvda-quote' };
 
 /**
  * Price history: calendar year-end closes (adjusted, Macrotrends) plus 2026
@@ -99,14 +104,22 @@ export const PRICE_HISTORY: PricePoint[] = [
       ['2026-10-05', 238.9], ['2026-10-06', 239.24], ['2026-10-07', 237.47], ['2026-10-08', 230.48], ['2026-10-09', 229.28],
       ['2026-10-12', 226.32], ['2026-10-13', 228.52], ['2026-10-14', 221.3], ['2026-10-15', 217.23], ['2026-10-16', 214.13],
       ['2026-10-19', 217.09], ['2026-10-20', 216.47], ['2026-10-21', 221.97], ['2026-10-22', 212.21], ['2026-10-23', 210.96],
-      ['2026-10-26', 216.0], ['2026-10-27', 217.94], ['2026-10-28', 215.38], ['2026-10-29', 213.66], ['2026-10-30', 204.64],
+      ['2026-10-26', 215.42], ['2026-10-27', 217.94], ['2026-10-28', 215.38], ['2026-10-29', 213.66], ['2026-10-30', 204.64],
       ['2026-11-02', 202.06], ['2026-11-03', 206.69], ['2026-11-04', 200.13], ['2026-11-05', 181.6], ['2026-11-06', 186.64],
       ['2026-11-09', 178.67], ['2026-11-10', 168.89], ['2026-11-11', 173.73], ['2026-11-12', 166.19], ['2026-11-13', 162.85],
       ['2026-11-16', 156.14], ['2026-11-17', 155.46], ['2026-11-18', 150.96], ['2026-11-19', 145.98], ['2026-11-20', 125.53],
+      ['2026-11-23', 165.05], ['2026-11-24', 155.38], ['2026-11-25', 149.3],
     ] as [string, number][]
-  ).map(([date, close]) => ({ date, close, sourceId: 'sa-nvda-history', kind: 'daily' as const })),
+  ).map(([date, close]) => ({
+    date,
+    close,
+    sourceId: date >= '2026-11-23' ? 'yahoo-nvda-quote' : date === '2026-10-26' ? 'investing-history' : 'sa-nvda-history',
+    kind: 'daily' as const,
+  })),
 ];
 
+/** Peer snapshot: StockAnalysis TTM statistics at the Nov 20, 2026 close (latest consistent provider snapshot available). */
+export const PEERS_AS_OF = 'Nov 20, 2026 close';
 export const PEERS: Peer[] = [
   {
     ticker: 'AMD', name: 'Advanced Micro Devices', price: 424.39, marketCapB: 702.39, evB: 695.83,

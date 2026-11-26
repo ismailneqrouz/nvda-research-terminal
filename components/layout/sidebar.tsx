@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
+  Presentation,
   BookOpen, Boxes, Calculator, Factory, FileSpreadsheet, Globe2, Landmark, LayoutDashboard, Menu, Newspaper, Percent, ShieldCheck, Swords, TrendingUp, TriangleAlert, X,
 } from 'lucide-react';
 import { NAV } from '@/lib/nav';
@@ -54,6 +55,12 @@ export function Sidebar() {
             );
           })}
         </nav>
+        <div className="px-2 pb-2">
+          <Link href="/present" className="flex items-center gap-2.5 rounded-[4px] border border-up/40 bg-up/10 px-2.5 py-2 text-[12.5px] font-medium text-up hover:bg-up/20">
+            <Presentation className="h-[15px] w-[15px]" strokeWidth={1.75} />
+            Präsentationsmodus
+          </Link>
+        </div>
         <div className="border-t border-line px-4 py-3 text-[10.5px] leading-4 text-faint">
           Research tool, not investment advice. Figures in USD; statements in millions.
         </div>

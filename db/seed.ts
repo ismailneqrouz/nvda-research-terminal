@@ -1,6 +1,7 @@
 import { BALANCE_PERIODS, BALANCE_SHEET, CASH_FLOW, FLOW_PERIODS, INCOME_STATEMENT, QUARTERS } from '../lib/data/financials';
 import { PRICE_HISTORY, QUOTE } from '../lib/data/market';
 import { NEWS } from '../lib/data/news';
+import { MONTHLY } from '../lib/data/returns';
 import { SOURCES } from '../lib/data/sources';
 import { validateDataset } from '../lib/data/validate';
 import { closePool, getPool } from '../lib/db/postgres';
@@ -81,6 +82,13 @@ export async function seed(connectionString = process.env.DATABASE_URL) {
       for (const s of n.sourceIds) {
         await db.query(`INSERT INTO news_sources (news_id,source_id) VALUES ($1,$2) ON CONFLICT DO NOTHING`, [n.id, s]);
       }
+    }
+    for (const m of MONTHLY) {
+      await db.query(
+        `INSERT INTO monthly_prices (month,nvda_adj_close,spy_adj_close,rf_annual_pct) VALUES ($1,$2,$3,$4)
+         ON CONFLICT (month) DO UPDATE SET nvda_adj_close=EXCLUDED.nvda_adj_close, spy_adj_close=EXCLUDED.spy_adj_close, rf_annual_pct=EXCLUDED.rf_annual_pct`,
+        [m.month, m.nvda, m.spy, m.rfAnnualPct],
+      );
     }
     await db.query('COMMIT');
   } catch (e) {

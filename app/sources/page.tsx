@@ -47,7 +47,7 @@ export default async function SourcesPage() {
           <dl className="grid grid-cols-[160px_1fr] gap-y-1.5 text-[12.5px]">
             <dt className="text-muted">Last updated</dt><dd>{date(DATA_LAST_UPDATED, 'long')}</dd>
             <dt className="text-muted">Latest filing</dt><dd>Q3 FY2027 (quarter ended Oct 25, 2026), released Nov 17, 2026</dd>
-            <dt className="text-muted">Market data</dt><dd>Close of Friday, Nov 20, 2026</dd>
+            <dt className="text-muted">Market data</dt><dd>NVDA: close of Wed, Nov 25, 2026 (US markets closed Nov 26, Thanksgiving). Peer multiples: Nov 20, 2026 close. Monthly return statistics: Nov 2021 – Oct 2026.</dd>
             <dt className="text-muted">Active data provider</dt><dd className="capitalize">{provider} {provider === 'static' ? '(bundled, validated dataset; set DATABASE_URL to serve from PostgreSQL)' : ''}</dd>
             <dt className="text-muted">Currency & units</dt><dd>USD; statements in millions; per-share in USD; shares in millions</dd>
           </dl>
@@ -55,6 +55,8 @@ export default async function SourcesPage() {
         <Panel title="Known limitations">
           <ul className="list-disc space-y-1.5 pl-4 text-[12.5px] leading-5 text-ink/85">
             <li>Market data are a static snapshot, not a live feed. No price API is called.</li>
+            <li>Peer multiples are from the Nov 20 provider snapshot; newer peer quotes found were inconsistent across sources, so they were not mixed in.</li>
+            <li>Risk statistics use monthly data (59 returns over 5 years); daily-data statistics would differ, and drawdowns measured on month-end closes understate intramonth extremes (e.g. Oct 6 → Nov 20, 2026: −47.5% on daily closes).</li>
             <li>Interim releases do not split interest income/expense; TTM EBIT and interest coverage are therefore unavailable.</li>
             <li>FY2021 balance sheet is not included, so FY2022 average-based ratios (ROIC, DSO, DIO) are unavailable.</li>
             <li>FY2026 segment revenue is disclosed to $0.1B; FY2027 segments are reported on a new basis and not restated historically.</li>

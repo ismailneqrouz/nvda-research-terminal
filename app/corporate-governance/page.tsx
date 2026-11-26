@@ -25,8 +25,8 @@ export default async function GovernancePage() {
   return (
     <>
       <PageHeader title="Corporate Governance" description="Leadership, board, ownership, capital allocation, audit and the regulatory and legal matters that opened in November 2026 — with what each means for shareholders." />
-      <Callout tone="down" title="Leadership transition under investigation">
-        On Nov 12, 2026 the board accepted Jensen Huang’s resignation as President, CEO and director; CFO Colette Kress is interim CEO while remaining CFO, and Harvey C. Jones became the first independent chair. An independent board committee with outside counsel is investigating Huang’s conduct. <SourceRef ids={['nvda-ceo-8k', 'huang-resign-sfs']} />
+      <Callout tone="warn" title="Resignation and reinstatement within 11 days">
+        On Nov 11–12, 2026 the board accepted Jensen Huang’s resignation and named CFO Colette Kress interim CEO; on Nov 17 the chair said the board did not intend to reinstate him; on Nov 23 the board reinstated Huang unanimously as President, CEO and director, citing input from senior U.S. government officials. Kress remains CFO and Harvey C. Jones remains the first independent chair. The independent investigation, House interviews (Dec 1–2) and a reported SEC inquiry are pending. <SourceRef ids={['nvda-ceo-8k', 'nvda-reinstate-8k', 'npr-house']} />
       </Callout>
 
       <SectionTitle>Leadership</SectionTitle>

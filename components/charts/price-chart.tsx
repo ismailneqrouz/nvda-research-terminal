@@ -13,7 +13,7 @@ export function PriceChart({ points, height = 230 }: { points: PricePoint[]; hei
     () =>
       points
         .filter((p) => (view === 'daily' ? p.kind === 'daily' : p.kind === 'year-end' || p.date === points[points.length - 1].date))
-        .map((p) => ({ date: p.date, label: view === 'daily' ? p.date.slice(5) : p.date.slice(0, 4) + (p.kind === 'daily' ? ' (Nov 20)' : ''), close: p.close })),
+        .map((p) => ({ date: p.date, label: view === 'daily' ? p.date.slice(5) : p.date.slice(0, 4) + (p.kind === 'daily' ? ` (${p.date.slice(5)})` : ''), close: p.close })),
     [points, view],
   );
   const first = data[0]?.close ?? 0;
@@ -23,7 +23,7 @@ export function PriceChart({ points, height = 230 }: { points: PricePoint[]; hei
     <div>
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <div className="text-[11.5px] text-muted">
-          {view === 'daily' ? 'Daily closes, Sep 14 – Nov 20, 2026' : 'Calendar year-end closes 2019–2025 (split- & dividend-adjusted) + latest close'}
+          {view === 'daily' ? `Daily closes, Sep 14 – ${points[points.length - 1].date.slice(5)} 2026` : 'Calendar year-end closes 2019–2025 (split- & dividend-adjusted) + latest close'}
           <span className={`num ml-2 ${chg < 0 ? 'text-down' : 'text-up'}`}>{chg < 0 ? '−' : '+'}{Math.abs(chg * 100).toFixed(1)}% over period</span>
         </div>
         <Segmented ariaLabel="Price history range" value={view} onChange={setView} options={[{ value: 'daily', label: 'Recent daily' }, { value: 'long', label: 'Long term' }]} />
@@ -40,8 +40,9 @@ export function PriceChart({ points, height = 230 }: { points: PricePoint[]; hei
             <CartesianGrid vertical={false} />
             <XAxis dataKey="label" tickLine={false} axisLine={{ stroke: 'rgb(33 42 54)' }} minTickGap={24} />
             <YAxis tickLine={false} axisLine={false} width={44} domain={['auto', 'auto']} tickFormatter={(v) => `$${v}`} scale={view === 'long' ? 'log' : 'auto'} />
-            {view === 'daily' && <ReferenceLine x="11-12" stroke="#c98500" strokeDasharray="3 3" label={{ value: 'CEO exit', fill: '#c98500', fontSize: 10, position: 'insideTopLeft' }} />}
-            {view === 'daily' && <ReferenceLine x="11-17" stroke="#9085e9" strokeDasharray="3 3" label={{ value: 'Q3 report', fill: '#9085e9', fontSize: 10, position: 'insideTopRight' }} />}
+            {view === 'daily' && <ReferenceLine x="11-12" stroke="#c98500" strokeDasharray="3 3" label={{ value: 'CEO exit', fill: '#c98500', fontSize: 10, position: 'insideTopRight' }} />}
+            {view === 'daily' && <ReferenceLine x="11-23" stroke="#199e70" strokeDasharray="3 3" label={{ value: 'CEO back', fill: '#199e70', fontSize: 10, position: 'insideBottomRight' }} />}
+            {view === 'daily' && <ReferenceLine x="11-17" stroke="#9085e9" strokeDasharray="3 3" label={{ value: 'Q3 report', fill: '#9085e9', fontSize: 10, position: 'insideTopLeft', dy: 14 }} />}
             <Tooltip
               content={({ active, payload }) =>
                 active && payload?.length ? (

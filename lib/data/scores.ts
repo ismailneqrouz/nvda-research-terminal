@@ -33,8 +33,8 @@ export const SCORES: ScoreDimension[] = [
   },
   {
     id: 'governance', name: 'Management & governance', group: 'company', score: 2, weight: 0.15, confidence: 'medium', href: '/corporate-governance',
-    explanation: 'Founder-CEO resigned amid personal-conduct and national-security questions; interim CEO doubles as CFO; reported SEC inquiry into accounting/disclosure; securities class action filed.',
-    evidence: ['8-K of Nov 12, 2026', 'WSJ (Nov 17) and Reuters (Nov 20) reports', 'First independent chair appointed (positive)'],
+    explanation: 'Founder-CEO resigned (Nov 11) and was reinstated (Nov 23) within 11 days; no formal succession plan; ratings-agency commentary questions board independence; reported SEC inquiry and class action pending.',
+    evidence: ['8-Ks of Nov 12 and Nov 23, 2026', 'Moody’s outlook cut to stable (Nov 18)', 'Independent chair retained (positive)'],
   },
   {
     id: 'position', name: 'Industry position', group: 'company', score: 4, weight: 0.1, confidence: 'medium', href: '/competition',
@@ -43,13 +43,13 @@ export const SCORES: ScoreDimension[] = [
   },
   {
     id: 'valuation', name: 'Valuation', group: 'stock', score: 4, weight: 0.1, confidence: 'low', href: '/valuation',
-    explanation: 'At ≈13× TTM GAAP EPS and a 4.9% FCF yield the stock is inexpensive on current earnings; whether that is cheap depends on how cyclical those earnings prove.',
-    evidence: ['P/E 13.5×, EV/EBIT 12.4× (calculated)', 'Base-case DCF ≈ market price; bear case far below', 'Peers: AMD 92×, AVGO 39× trailing P/E'],
+    explanation: 'At ≈16× TTM GAAP EPS and a ≈4.1% FCF yield the stock is inexpensive on current earnings; whether that is cheap depends on how cyclical those earnings prove.',
+    evidence: ['P/E 16.0×, EV/EBIT ≈14.8× (calculated, Nov 25)', 'Base-case DCF ≈20% below the price; bull case far above', 'Peers: AMD 92×, AVGO 39× trailing P/E (Nov 20)'],
   },
   {
     id: 'risk', name: 'Risk exposure', group: 'stock', score: 2, weight: 0.1, confidence: 'medium', href: '/risk-analysis',
     explanation: 'Unusually wide distribution: governance/accounting uncertainty stacked on cyclical demand, export controls and Taiwan concentration. Lower score = higher risk.',
-    evidence: ['Beta 2.25 (5Y)', 'Stock −48% from Oct 6 record close', 'Four critical items in the risk register'],
+    evidence: ['Beta 2.25 (5Y monthly; our calculation 2.25)', '5Y max drawdown −63% (2022); −38% from the Oct 6 record close', '1Y Sharpe ≈0.05 vs 0.64 for the S&P 500 ETF'],
   },
   {
     id: 'outlook', name: 'Future outlook', group: 'company', score: 4, weight: 0.1, confidence: 'low', href: '/future-outlook',
@@ -67,12 +67,12 @@ export function weightedScore(group?: 'company' | 'stock'): number {
 export const THREE_QUESTIONS = [
   {
     q: 'Is NVIDIA a high-quality company?',
-    a: 'Yes, on economics: exceptional margins, returns on capital, balance-sheet strength and technological leadership. Governance quality has deteriorated sharply in November 2026 and is now the weakest dimension.',
+    a: 'Yes, on economics: exceptional margins, returns on capital, balance-sheet strength and technological leadership. Governance is the weakest dimension after the November 2026 resignation-and-reinstatement episode.',
     tone: 'positive' as const,
   },
   {
     q: 'Is the stock attractively valued?',
-    a: 'On trailing numbers it looks inexpensive (≈13× earnings). The market is implicitly pricing a large earnings decline and a governance discount; our base-case DCF is close to the current price, so the answer depends on which assumptions you believe.',
+    a: 'On trailing numbers it looks inexpensive (≈16× earnings). The market is implicitly pricing a large earnings decline and a governance discount; our base-case DCF is below the current price and the bull case far above, so the answer depends on which assumptions you believe.',
     tone: 'mixed' as const,
   },
   {

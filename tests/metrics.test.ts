@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { ALL_METRICS, analytics, valuationSnapshot } from '@/lib/finance/metrics';
-import { PROVIDER_NVDA } from '@/lib/data/market';
+import { PROVIDER_NVDA, PROVIDER_NVDA_LATEST, QUOTE } from '@/lib/data/market';
 import { StaticProvider } from '@/lib/data/provider';
 
 describe('company metrics (calculated from reported data)', () => {
@@ -53,7 +53,7 @@ describe('company metrics (calculated from reported data)', () => {
 });
 
 describe('valuation snapshot cross-checks against an independent provider', () => {
-  const v = valuationSnapshot();
+  const v = valuationSnapshot(PROVIDER_NVDA.price);
   it.each([
     ['pe', PROVIDER_NVDA.pe],
     ['ps', PROVIDER_NVDA.ps],
@@ -71,6 +71,12 @@ describe('valuation snapshot cross-checks against an independent provider', () =
   });
   it('valuation responds to price', () => {
     expect(valuationSnapshot(251.06).pe).toBeCloseTo(v.pe * 2, 6);
+  });
+  it('latest close matches Yahoo Finance P/E and market cap within 1%', () => {
+    const now = valuationSnapshot();
+    expect(QUOTE.price).toBe(PROVIDER_NVDA_LATEST.price);
+    expect(Math.abs(now.pe / PROVIDER_NVDA_LATEST.pe - 1)).toBeLessThan(0.01);
+    expect(Math.abs(now.marketCap / 1e6 / PROVIDER_NVDA_LATEST.marketCapT - 1)).toBeLessThan(0.01);
   });
 });
 

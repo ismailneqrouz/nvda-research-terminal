@@ -28,6 +28,7 @@ export function TopBar() {
         <span className="sm:hidden">NVDA <span className="num text-ink">{usd(QUOTE.price)}</span> <span className={`num ${down ? 'text-down' : 'text-up'}`}>{pct(QUOTE.changePct, 2, true)}</span></span>
         <span>Price: <span className="text-muted">{QUOTE.asOfLabel}</span></span>
         <span>After hours: <span className="num text-muted">{usd(QUOTE.afterHours)}</span></span>
+        <span className="hidden xl:inline">{QUOTE.nextSession}</span>
         <span>Latest filing: <span className="text-muted">{LATEST_REPORT.label}, released {date(LATEST_REPORT.filed)}</span></span>
         <span>Dataset updated: <span className="text-muted">{date(DATA_LAST_UPDATED)}</span></span>
         <span className="flex items-center gap-1">Market data age: <span className="text-muted"><Freshness asOf={QUOTE.asOf} label={QUOTE.asOfLabel} /></span></span>

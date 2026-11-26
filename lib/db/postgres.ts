@@ -1,4 +1,5 @@
 import type { Pool as PgPool } from 'pg';
+import type { MonthRow } from '../data/returns';
 import { LineItemSchema, NewsItemSchema, QuarterSchema, type LineItem, type NewsItem, type Quarter } from '../data/schema';
 
 /** Lazily-created connection pool (server-only). */
@@ -77,4 +78,9 @@ export async function loadNews(db: PgPool): Promise<NewsItem[]> {
       sourceIds: r.source_ids,
     }),
   );
+}
+
+export async function loadMonthly(db: PgPool): Promise<MonthRow[]> {
+  const res = await db.query(`SELECT month, nvda_adj_close, spy_adj_close, rf_annual_pct FROM monthly_prices ORDER BY month`);
+  return res.rows.map((r) => ({ month: String(r.month), nvda: Number(r.nvda_adj_close), spy: Number(r.spy_adj_close), rfAnnualPct: Number(r.rf_annual_pct) }));
 }

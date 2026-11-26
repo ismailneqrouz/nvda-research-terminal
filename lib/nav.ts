@@ -14,3 +14,5 @@ export const NAV = [
   { href: '/news', label: 'News & Events', icon: 'Newspaper', keywords: 'earnings sec probe resignation export rule' },
   { href: '/sources', label: 'Sources & Methodology', icon: 'BookOpen', keywords: 'sources methodology data integrity definitions' },
 ] as const;
+
+export const PRESENT_LINK = { href: '/present', label: 'Präsentationsmodus', keywords: 'presentation slides lernen sharpe sortino tabelle spreadsheet' };

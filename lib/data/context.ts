@@ -18,10 +18,16 @@ export interface MacroIndicator {
 
 export const MACRO: MacroIndicator[] = [
   {
-    id: 'policy-rate', name: 'Fed funds target range', value: '3.75% – 4.00%', asOf: '2026-10-28', direction: 'up', sourceId: 'fed-oct26',
-    transmission: ['Fed raised in Sep 2026, ~85% odds of another hike Dec 8–9', 'Higher risk-free rate → higher WACC', 'Lower present value of distant cash flows → multiple compression for long-duration equities', 'Higher financing cost for debt-funded data centers (neoclouds)'],
+    id: 'policy-rate', name: 'Fed funds target range', value: '3.75% – 4.00% (hike expected Dec 9)', asOf: '2026-11-25', direction: 'up', sourceId: 'pce-fed-dec',
+    transmission: ['Fed raised in Sep 2026; after hot October PCE data markets treat a Dec 8–9 hike as all but settled', 'Higher risk-free rate → higher WACC', 'Lower present value of distant cash flows → multiple compression for long-duration equities', 'Higher financing cost for debt-funded data centers (neoclouds)'],
     effect: 'headwind',
     sensitivity: 'In the base-case DCF, +1 pt of WACC lowers intrinsic value by roughly 10–12%.',
+  },
+  {
+    id: 'tbill', name: '3-month Treasury bill (risk-free rate)', value: '4.05% (Oct 2026 avg.)', asOf: '2026-11-02', direction: 'up', sourceId: 'fred-tb3ms',
+    transmission: ['Cash now yields ≈4% risk-free', 'Raises the hurdle any risky asset must clear', 'Directly lowers Sharpe and Sortino ratios (the numerator is return minus this rate)'],
+    effect: 'headwind',
+    sensitivity: 'Used month-by-month as the risk-free rate in this platform’s Sharpe, Sortino, Treynor and alpha calculations.',
   },
   {
     id: 'ten-year', name: '10-year Treasury yield', value: '5.12%', asOf: '2026-11-12', direction: 'up', sourceId: 'yields-nov26',
@@ -30,13 +36,13 @@ export const MACRO: MacroIndicator[] = [
     sensitivity: 'Directly enters the cost-of-equity build in the DCF (risk-free input).',
   },
   {
-    id: 'inflation', name: 'CPI inflation', value: '3.7% y/y (Sep); +0.4% m/m (Oct)', asOf: '2026-11-10', direction: 'up', sourceId: 'cpi-oct26-summary',
-    transmission: ['Energy-led inflation (gasoline +37% y/y)', 'Keeps the Fed hawkish', 'Component inflation (memory) raises NVIDIA’s cost of revenue — gross margin guided to 71–72%', 'NVIDIA passes costs through via price increases from FY2028'],
+    id: 'inflation', name: 'PCE inflation (Fed’s preferred gauge)', value: '3.8% y/y; core 3.3% (Oct 2026)', asOf: '2026-11-25', direction: 'up', sourceId: 'pce-oct26',
+    transmission: ['Core PCE at its highest since Nov 2023; CPI +0.4% m/m in Oct; energy-led (gasoline +37% y/y)', 'Keeps the Fed hawkish', 'Component inflation (memory) raises NVIDIA’s cost of revenue — gross margin guided to 71–72%', 'NVIDIA passes costs through via price increases from FY2028'],
     effect: 'headwind',
     sensitivity: 'Each 1 pt of gross-margin compression ≈ $4B of annual operating income at FY2027E revenue.',
   },
   {
-    id: 'gdp', name: 'US real GDP growth', value: '3.4% SAAR (Q3 2026, advance)', asOf: '2026-10-29', direction: 'up', sourceId: 'bea-gdp-q3-26',
+    id: 'gdp', name: 'US real GDP growth', value: '4.3% SAAR (Q3 2026, second estimate)', asOf: '2026-11-25', direction: 'up', sourceId: 'pce-oct26-reuters',
     transmission: ['Growth supported by business investment, including AI infrastructure', 'Strong nominal growth sustains enterprise IT budgets', 'But strong growth + inflation = higher rates'],
     effect: 'mixed',
     sensitivity: 'NVIDIA demand is driven more by hyperscaler capex than by GDP; correlation is weak in the short run.',

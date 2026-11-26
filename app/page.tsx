@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Presentation } from 'lucide-react';
+import { RISK_3Y, RISK_5Y } from '@/lib/finance/risk-report';
 import { getResearchData } from '@/lib/data/provider';
 import { CONSENSUS, PRICE_HISTORY, QUOTE } from '@/lib/data/market';
 import { GUIDANCE, SEGMENTS_FY27 } from '@/lib/data/financials';
@@ -45,14 +46,22 @@ export default async function OverviewPage() {
         description="NVIDIA designs accelerated-computing platforms — GPUs, CPUs, networking, systems and software — and today earns ~93% of revenue from AI data-center infrastructure. Everything below is computed from NVIDIA’s filings unless labelled otherwise."
       />
 
-      <Callout tone="down" title="November 2026: the investment case changed faster than the financials">
-        Founder-CEO Jensen Huang resigned on Nov 12; CFO Colette Kress is interim CEO. The SEC is reportedly examining NVIDIA’s disclosures (WSJ, Nov 17) and accounting (Reuters, Nov 20 — not confirmed by NVIDIA or the SEC). The stock closed at {usd(QUOTE.price)}, {pct(fromRecord, 0)} from its Oct 6 record close, even as Q3 FY2027 revenue grew 103%.{' '}
+      <Callout tone="warn" title="November 2026: governance whiplash, unchanged fundamentals">
+        Jensen Huang resigned as CEO on Nov 11–12 and was reinstated by a unanimous board vote on Nov 23 (Colette Kress remains CFO). The SEC is reportedly examining NVIDIA’s disclosures and accounting (WSJ, Reuters — unconfirmed). The stock moved from {usd(QUOTE.recordClose)} (Oct 6 record) to $125.53 (Nov 20), jumped 31.5% on the reinstatement and closed at {usd(QUOTE.price)} on Nov 25 ({pct(fromRecord, 0)} from the record) — while Q3 FY2027 revenue grew 103%.{' '}
         <Link href="/news" className="link">See News & Events →</Link>
       </Callout>
+      <div className="mt-3 flex flex-wrap items-center gap-3 rounded border border-up/30 bg-up/[0.05] px-4 py-3">
+        <Presentation className="h-4 w-4 text-up" />
+        <div className="min-w-0 flex-1 text-[12.5px] leading-5">
+          <span className="font-medium text-ink">Präsentationsmodus</span>
+          <span className="text-muted"> — die wichtigsten Kennzahlen als Folien zum Lernen: Was misst die Kennzahl, wie wird sie berechnet (mit Tabellenblatt und sichtbaren Formeln), wie liest man sie. Inkl. Sharpe, Sortino, Beta, Drawdown und VaR.</span>
+        </div>
+        <Link href="/present" className="inline-flex h-8 items-center gap-1.5 rounded border border-up/50 bg-up/15 px-3 text-[12px] font-medium text-up hover:bg-up/25">Starten <ArrowUpRight className="h-3.5 w-3.5" /></Link>
+      </div>
 
       <SectionTitle>Key figures</SectionTitle>
       <MetricGrid>
-        <Metric label="Share price" value={usd(QUOTE.price)} delta={{ text: pct(QUOTE.changePct, 1, true), positive: false }} sub="Nov 20 close" status="market" sourceIds={QUOTE.sourceIds} period={QUOTE.asOfLabel} />
+        <Metric label="Share price" value={usd(QUOTE.price)} delta={{ text: pct(QUOTE.changePct, 1, true), positive: QUOTE.changePct >= 0 }} sub="Nov 25 close" status="market" sourceIds={QUOTE.sourceIds} period={QUOTE.asOfLabel} />
         <Metric label="Market capitalization" value={usdM(v.marketCap)} sub="24.15B shares" status="calculated" sourceIds={['sa-nvda-stats']} />
         <Metric label="Enterprise value" termId="ev" value={usdM(v.enterpriseValue)} sub="Mkt cap + debt − liquid cash" status="calculated" sourceIds={['nvda-q3fy27-pr']} />
         <Metric label="Revenue (TTM)" termId="ttm" value={usdM(m.revenue)} delta={{ text: pct(m.revenueGrowth, 0, true), positive: true }} sub="y/y" status="ttm" sourceIds={['nvda-q3fy27-pr', 'nvda-q4fy26-pr']} />
@@ -71,6 +80,17 @@ export default async function OverviewPage() {
         <Metric label="Q4 FY27 revenue guide" value={usdM(GUIDANCE.q4fy27.revenue)} sub="±3%, 14-week quarter" status="guidance" sourceIds={['nvda-q3fy27-pr']} />
         <Metric label="Data Center share" value={pct(SEGMENTS_FY27.dataCenter / (SEGMENTS_FY27.dataCenter + SEGMENTS_FY27.edgeComputing), 0)} sub="Q3 FY27 revenue" status="calculated" sourceIds={['nvda-q3fy27-pr']} />
       </MetricGrid>
+
+      <SectionTitle>Risk-adjusted returns (monthly, vs S&P 500 ETF)</SectionTitle>
+      <MetricGrid>
+        <Metric label="Sharpe ratio (3Y)" value={RISK_3Y.nvda.sharpe.toFixed(2)} sub={`S&P 500: ${RISK_3Y.spy.sharpe.toFixed(2)}`} status="calculated" sourceIds={['yahoo-nvda-monthly', 'fred-tb3ms']} />
+        <Metric label="Sortino ratio (3Y)" value={RISK_3Y.nvda.sortino.toFixed(2)} sub={`S&P 500: ${RISK_3Y.spy.sortino.toFixed(2)}`} status="calculated" sourceIds={['yahoo-nvda-monthly', 'fred-tb3ms']} />
+        <Metric label="Volatility (3Y, ann.)" value={pct(RISK_3Y.nvda.volatility, 0)} sub={`S&P 500: ${pct(RISK_3Y.spy.volatility, 0)}`} status="calculated" sourceIds={['yahoo-nvda-monthly']} />
+        <Metric label="Beta (5Y monthly)" value={RISK_5Y.beta.toFixed(2)} sub={`Yahoo: ${QUOTE.beta5y.toFixed(2)}`} status="calculated" sourceIds={['yahoo-nvda-monthly', 'yahoo-spy-monthly', 'yahoo-nvda-quote']} />
+        <Metric label="Max drawdown (5Y, month-end)" value={pct(RISK_5Y.nvda.maxDrawdown, 0)} sub={`${RISK_5Y.nvda.mddPeak} → ${RISK_5Y.nvda.mddTrough}`} status="calculated" sourceIds={['yahoo-nvda-monthly']} />
+        <Metric label="Monthly VaR 95% (5Y, hist.)" value={pct(-RISK_5Y.nvda.var95, 1)} sub="1 in 20 months worse than this" status="calculated" sourceIds={['yahoo-nvda-monthly']} />
+      </MetricGrid>
+      <p className="mt-2 text-[11px] text-faint">Window ends Oct 2026 (last complete month). November month-to-date: {pct(149.3 / 204.64 - 1, 1, true)}. <Link href="/present" className="link">Explained step by step in presentation mode →</Link></p>
 
       <SectionTitle>Performance</SectionTitle>
       <div className="grid gap-4 xl:grid-cols-2">
@@ -150,7 +170,7 @@ export default async function OverviewPage() {
         </Panel>
         <Panel title="Overall assessment" right={<StatusBadge status="assessment" />}>
           <p className="text-[12.5px] leading-5 text-ink/85">
-            An exceptional business whose stock is now priced like a cyclical at peak earnings ({mult(v.pe)} TTM P/E) with a governance discount. Our base-case DCF ({usd(scen[1].value, 0)}) is close to the market price, and the illustrative 25/50/25 probability-weighted value is {usd(weighted, 0)}. The spread between bull ({usd(scen[0].value, 0)}) and bear ({usd(scen[2].value, 0)}) — not the point estimate — is the key output: outcomes hinge on AI-capex durability and on whether the accounting questions are benign.
+            An exceptional business whose stock is now priced like a cyclical at peak earnings ({mult(v.pe)} TTM P/E) with a governance discount. Our base-case DCF ({usd(scen[1].value, 0)}) is {Math.abs(scen[1].value / QUOTE.price - 1) < 0.1 ? 'close to' : scen[1].value < QUOTE.price ? `${pct(1 - scen[1].value / QUOTE.price, 0)} below` : `${pct(scen[1].value / QUOTE.price - 1, 0)} above`} the market price, and the illustrative 25/50/25 probability-weighted value is {usd(weighted, 0)}. The spread between bull ({usd(scen[0].value, 0)}) and bear ({usd(scen[2].value, 0)}) — not the point estimate — is the key output: outcomes hinge on AI-capex durability and on whether the accounting questions are benign.
           </p>
         </Panel>
       </div>

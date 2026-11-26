@@ -31,6 +31,8 @@ describe.skipIf(!url)('PostgresProvider (integration)', () => {
     }
     expect(pg.quarters.map((q) => q.key)).toEqual(st.quarters.map((q) => q.key));
     expect(pg.news.length).toBe(st.news.length);
+    expect(pg.monthly).toHaveLength(st.monthly.length);
+    expect(pg.monthly[59].nvda).toBeCloseTo(st.monthly[59].nvda, 4);
     expect(pg.quote.price).toBeCloseTo(st.quote.price, 6);
     expect(pg.analytics.ALL_METRICS.TTM.fcf).toBeCloseTo(st.analytics.ALL_METRICS.TTM.fcf!, 4);
     expect(pg.analytics.valuationSnapshot().pe).toBeCloseTo(st.analytics.valuationSnapshot().pe, 8);
